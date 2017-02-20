@@ -1,7 +1,7 @@
 class Homestead
   def Homestead.configure(config, settings)
     # Set The VM Provider
-    ENV['VAGRANT_DEFAULT_PROVIDER'] = settings["provider"] ||= "virtualbox"
+    ENV['VAGRANT_DEFAULT_PROVIDER'] = settings["provider"] ||= "hyperv"
 
     # Configure Local Variable To Access Scripts From Remote Location
     scriptDir = File.dirname(__FILE__)
@@ -61,7 +61,14 @@ class Homestead
       v.memory = settings["memory"] ||= 2048
       v.cpus = settings["cpus"] ||= 1
     end
-
+    
+    # Configure A Few HyperV Settings
+    config.vm.provider "hyperv" do |v|
+      v.vmname = settings["name"] ||= "homestead-7"
+      v.memory = settings["memory"] ||= 2048
+      v.cpus = settings["cpus"] ||= 1
+    end
+    
     # Standardize Ports Naming Schema
     if (settings.has_key?("ports"))
       settings["ports"].each do |port|
